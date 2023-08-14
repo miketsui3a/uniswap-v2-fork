@@ -1,0 +1,18 @@
+{
+  "name": "hardhat-project",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.4.7",
+    "hardhat": "^2.17.1"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.7.3",
+    "@uniswap/lib": "^4.0.1-alpha",
+    "@uniswap/v2-core": "^1.0.1",
+    "dotenv": "^16.0.1",
+    "hardhat-deploy": "^0.11.34"
+  }
+}
