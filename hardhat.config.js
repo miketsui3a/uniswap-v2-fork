@@ -166,7 +166,7 @@ module.exports = {
           },
         },
       },
-      "contracts/XBNB.sol": {
+      "contracts/XBS.sol": {
         version: "0.8.0",
         settings: {
           optimizer: {
@@ -188,11 +188,16 @@ module.exports = {
       chainId: 97,
       accounts: [process.env.PRIVATE_KEY],
     },
-    opBNB: {
-      url: `https://opbnb.rpc.thirdweb.com/`,
+    opBNBTest: {
+      url: `https://opbnb-testnet-rpc.bnbchain.org`,
       chainId: 5611,
       accounts: [process.env.PRIVATE_KEY],
-    }
+    },
+    opBNB: {
+      url: `https://opbnb-mainnet-rpc.bnbchain.org`,
+      chainId: 204,
+      accounts: [process.env.PRIVATE_KEY],
+    },
   },
   namedAccounts: {
     deployer: 0,

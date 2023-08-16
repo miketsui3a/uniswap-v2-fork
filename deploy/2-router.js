@@ -21,7 +21,7 @@ module.exports = async ({
       contract: "contracts/UniswapV2Router02.sol:UniswapV2Router02",
       args: [
         factoryDeploy.address,
-        weth || "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "0x4200000000000000000000000000000000000006",
       ],
     });
   } else {

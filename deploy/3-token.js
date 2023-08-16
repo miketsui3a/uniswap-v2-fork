@@ -7,18 +7,18 @@ module.exports = async ({
   network,
 }) => {
   const { deployer } = await getNamedAccounts();
-  let xbnbDeploy = await getOrNull("XBNB");
-  console.log(xbnbDeploy?.address);
-  if (!xbnbDeploy) {
-    await deploy("XBNB", {
+  let xbsDeploy = await getOrNull("XBS");
+  console.log(xbsDeploy?.address);
+  if (!xbsDeploy) {
+    await deploy("XBS", {
       from: deployer,
       log: true,
-      contract: "contracts/XBNB.sol:XBNB",
+      contract: "contracts/XBS.sol:XBS",
       args: [parseEther("10000000"), deployer],
     });
   } else {
-    console.log(`XBNB already deployed at ${xbnbDeploy.address}`);
+    console.log(`XBS already deployed at ${xbsDeploy.address}`);
   }
 };
 
-module.exports.tags = ["XBNB"];
+module.exports.tags = ["XBS"];
