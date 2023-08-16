@@ -104,12 +104,89 @@ module.exports = {
           },
         },
       },
+      "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol": {
+        version: "0.8.1",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      "@openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol": {
+        version: "0.8.0",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      "@openzeppelin/contracts/utils/Address.sol": {
+        version: "0.8.1",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      "@openzeppelin/contracts/access/Ownable.sol": {
+        version: "0.8.1",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      "@openzeppelin/contracts/security/ReentrancyGuard.sol": {
+        version: "0.8.1",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      "contracts/MasterChef.sol": {
+        version: "0.8.1",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      "@openzeppelin/contracts/utils/math/SafeMath.sol": {
+        version: "0.8.1",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      "contracts/Xbase.sol": {
+        version: "0.8.0",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
     },
   },
   networks: {
     ftmTest: {
       url: `https://rpc.testnet.fantom.network`,
       chainId: 4002,
+      accounts: [process.env.PRIVATE_KEY],
+    },
+    bscTest: {
+      url: `https://data-seed-prebsc-1-s1.binance.org:8545/`,
+      chainId: 97,
       accounts: [process.env.PRIVATE_KEY],
     },
   },
