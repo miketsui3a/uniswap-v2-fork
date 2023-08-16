@@ -9,9 +9,8 @@ module.exports = async ({
 }) => {
   const { deployer } = await getNamedAccounts();
   let masterChefDeploy = await getOrNull("MasterChef");
-  let xbaseDeploy = await deployments.get("Xbase");
-  console.log(masterChefDeploy?.address);
-  const xbasePerBlock = "10.0";
+  let xbnbDeploy = await deployments.get("XBNB");
+  const xbnbPerBlock = "10.0";
   const startBlock = 9999999999;
   if (!masterChefDeploy) {
     await deploy("MasterChef", {
@@ -19,10 +18,10 @@ module.exports = async ({
       log: true,
       contract: "contracts/MasterChef.sol:MasterChef",
       args: [
-        xbaseDeploy.address,
+        xbnbDeploy.address,
         deployer,
         deployer,
-        parseEther(xbasePerBlock),
+        parseEther(xbnbPerBlock),
         startBlock,
       ],
     });

@@ -10,12 +10,12 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./Xbase.sol";
+import "./XBNB.sol";
 
 
 
 
-// MasterChef is the master of EGG. He can make Xbase and he is a fair guy.
+// MasterChef is the master of EGG. He can make XBNB and he is a fair guy.
 //
 // Note that it's ownable and the owner wields tremendous power. The ownership
 // will be transferred to a governance smart contract once EGG is sufficiently
@@ -34,10 +34,10 @@ contract MasterChef is Ownable, ReentrancyGuard {
         // We do some fancy math here. Basically, any point in time, the amount of EGG
         // entitled to a user but is pending to be distributed is:
         //
-        //   pending reward = (user.amount * pool.accXbasePerShare) - user.rewardDebt
+        //   pending reward = (user.amount * pool.accXBNBPerShare) - user.rewardDebt
         //
         // Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
-        //   1. The pool's `accXbasePerShare` (and `lastRewardBlock`) gets updated.
+        //   1. The pool's `accXBNBPerShare` (and `lastRewardBlock`) gets updated.
         //   2. User receives the pending reward sent to his/her address.
         //   3. User's `amount` gets updated.
         //   4. User's `rewardDebt` gets updated.
@@ -48,17 +48,17 @@ contract MasterChef is Ownable, ReentrancyGuard {
         IERC20 lpToken; // Address of LP token contract.
         uint256 allocPoint; // How many allocation points assigned to this pool. EGGs to distribute per block.
         uint256 lastRewardBlock; // Last block number that EGGs distribution occurs.
-        uint256 accXbasePerShare; // Accumulated EGGs per share, times 1e18. See below.
+        uint256 accXBNBPerShare; // Accumulated EGGs per share, times 1e18. See below.
         uint16 depositFeeBP; // Deposit fee in basis points
         uint256 lpSupply;
     }
 
     // The EGG TOKEN!
-    Xbase public xbase;
+    XBNB public xbnb;
     // Dev address.
     address public devaddr;
     // EGG tokens created per block.
-    uint256 public XbasePerBlock;
+    uint256 public XBNBPerBlock;
     // Deposit Fee address
     address public feeAddress;
     // Max emission rate.
@@ -70,7 +70,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
     mapping(uint256 => mapping(address => UserInfo)) public userInfo;
     // Total allocation points. Must be the sum of all allocation points in all pools.
     uint256 public totalAllocPoint = 0;
-    // The block number when Xbase mining starts.
+    // The block number when XBNB mining starts.
     uint256 public startBlock;
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
@@ -82,7 +82,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
     );
     event SetFeeAddress(address indexed user, address indexed newAddress);
     event SetDevAddress(address indexed user, address indexed newAddress);
-    event UpdateEmissionRate(address indexed user, uint256 XbasePerBlock);
+    event UpdateEmissionRate(address indexed user, uint256 XBNBPerBlock);
     event addPool(
         uint256 indexed pid,
         address lpToken,
@@ -98,16 +98,16 @@ contract MasterChef is Ownable, ReentrancyGuard {
     event UpdateStartBlock(uint256 newStartBlock);
 
     constructor(
-        Xbase _xbase,
+        XBNB _xbnb,
         address _devaddr,
         address _feeAddress,
-        uint256 _XbasePerBlock,
+        uint256 _XBNBPerBlock,
         uint256 _startBlock
     ) public {
-        xbase = _xbase;
+        xbnb = _xbnb;
         devaddr = _devaddr;
         feeAddress = _feeAddress;
-        XbasePerBlock = _XbasePerBlock;
+        XBNBPerBlock = _XBNBPerBlock;
         startBlock = _startBlock;
     }
 
@@ -149,7 +149,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
                 lpToken: _lpToken,
                 allocPoint: _allocPoint,
                 lastRewardBlock: lastRewardBlock,
-                accXbasePerShare: 0,
+                accXBNBPerShare: 0,
                 depositFeeBP: _depositFeeBP,
                 lpSupply: 0
             })
@@ -163,7 +163,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         );
     }
 
-    // Update the given pool's Xbase allocation point and deposit fee. Can only be called by the owner.
+    // Update the given pool's XBNB allocation point and deposit fee. Can only be called by the owner.
     function set(
         uint256 _pid,
         uint256 _allocPoint,
@@ -197,15 +197,15 @@ contract MasterChef is Ownable, ReentrancyGuard {
         return _to.sub(_from);
     }
 
-    // View function to see pending Xbases on frontend.
-    function pendingXbase(uint256 _pid, address _user)
+    // View function to see pending XBNBs on frontend.
+    function pendingXBNB(uint256 _pid, address _user)
         external
         view
         returns (uint256)
     {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
-        uint256 accXbasePerShare = pool.accXbasePerShare;
+        uint256 accXBNBPerShare = pool.accXBNBPerShare;
         if (
             block.number > pool.lastRewardBlock &&
             pool.lpSupply != 0 &&
@@ -215,16 +215,16 @@ contract MasterChef is Ownable, ReentrancyGuard {
                 pool.lastRewardBlock,
                 block.number
             );
-            uint256 xbaseReward = multiplier
-                .mul(XbasePerBlock)
+            uint256 xbnbReward = multiplier
+                .mul(XBNBPerBlock)
                 .mul(pool.allocPoint)
                 .div(totalAllocPoint);
-            accXbasePerShare = accXbasePerShare.add(
-                xbaseReward.mul(1e18).div(pool.lpSupply)
+            accXBNBPerShare = accXBNBPerShare.add(
+                xbnbReward.mul(1e18).div(pool.lpSupply)
             );
         }
         return
-            user.amount.mul(accXbasePerShare).div(1e18).sub(user.rewardDebt);
+            user.amount.mul(accXBNBPerShare).div(1e18).sub(user.rewardDebt);
     }
 
     // Update reward variables for all pools. Be careful of gas spending!
@@ -246,19 +246,19 @@ contract MasterChef is Ownable, ReentrancyGuard {
             return;
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-        uint256 xbaseReward = multiplier
-            .mul(XbasePerBlock)
+        uint256 xbnbReward = multiplier
+            .mul(XBNBPerBlock)
             .mul(pool.allocPoint)
             .div(totalAllocPoint);
-        xbase.mint(devaddr, xbaseReward.div(10));
-        xbase.mint(address(this), xbaseReward);
-        pool.accXbasePerShare = pool.accXbasePerShare.add(
-            xbaseReward.mul(1e18).div(pool.lpSupply)
+        xbnb.mint(devaddr, xbnbReward.div(10));
+        xbnb.mint(address(this), xbnbReward);
+        pool.accXBNBPerShare = pool.accXBNBPerShare.add(
+            xbnbReward.mul(1e18).div(pool.lpSupply)
         );
         pool.lastRewardBlock = block.number;
     }
 
-    // Deposit LP tokens to MasterChef for Xbase allocation.
+    // Deposit LP tokens to MasterChef for XBNB allocation.
     function deposit(uint256 _pid, uint256 _amount) external nonReentrant {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
@@ -266,11 +266,11 @@ contract MasterChef is Ownable, ReentrancyGuard {
         if (user.amount > 0) {
             uint256 pending = user
                 .amount
-                .mul(pool.accXbasePerShare)
+                .mul(pool.accXBNBPerShare)
                 .div(1e18)
                 .sub(user.rewardDebt);
             if (pending > 0) {
-                safeXbaseTransfer(msg.sender, pending);
+                safeXBNBTransfer(msg.sender, pending);
             }
         }
         if (_amount > 0) {
@@ -291,7 +291,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
                 pool.lpSupply = pool.lpSupply.add(_amount);
             }
         }
-        user.rewardDebt = user.amount.mul(pool.accXbasePerShare).div(1e18);
+        user.rewardDebt = user.amount.mul(pool.accXBNBPerShare).div(1e18);
         emit Deposit(msg.sender, _pid, _amount);
     }
 
@@ -301,18 +301,18 @@ contract MasterChef is Ownable, ReentrancyGuard {
         UserInfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "withdraw: not good");
         updatePool(_pid);
-        uint256 pending = user.amount.mul(pool.accXbasePerShare).div(1e18).sub(
+        uint256 pending = user.amount.mul(pool.accXBNBPerShare).div(1e18).sub(
             user.rewardDebt
         );
         if (pending > 0) {
-            safeXbaseTransfer(msg.sender, pending);
+            safeXBNBTransfer(msg.sender, pending);
         }
         if (_amount > 0) {
             user.amount = user.amount.sub(_amount);
             pool.lpToken.safeTransfer(address(msg.sender), _amount);
             pool.lpSupply = pool.lpSupply.sub(_amount);
         }
-        user.rewardDebt = user.amount.mul(pool.accXbasePerShare).div(1e18);
+        user.rewardDebt = user.amount.mul(pool.accXBNBPerShare).div(1e18);
         emit Withdraw(msg.sender, _pid, _amount);
     }
 
@@ -334,16 +334,16 @@ contract MasterChef is Ownable, ReentrancyGuard {
         emit EmergencyWithdraw(msg.sender, _pid, amount);
     }
 
-    // Safe xbase transfer function, just in case if rounding error causes pool to not have enough EGGs.
-    function safeXbaseTransfer(address _to, uint256 _amount) internal {
-        uint256 xbaseBal = xbase.balanceOf(address(this));
+    // Safe xbnb transfer function, just in case if rounding error causes pool to not have enough EGGs.
+    function safeXBNBTransfer(address _to, uint256 _amount) internal {
+        uint256 xbnbBal = xbnb.balanceOf(address(this));
         bool transferSuccess = false;
-        if (_amount > xbaseBal) {
-            transferSuccess = xbase.transfer(_to, xbaseBal);
+        if (_amount > xbnbBal) {
+            transferSuccess = xbnb.transfer(_to, xbnbBal);
         } else {
-            transferSuccess = xbase.transfer(_to, _amount);
+            transferSuccess = xbnb.transfer(_to, _amount);
         }
-        require(transferSuccess, "safeXbaseTransfer: transfer failed");
+        require(transferSuccess, "safeXBNBTransfer: transfer failed");
     }
 
     // Update dev address.
@@ -362,11 +362,11 @@ contract MasterChef is Ownable, ReentrancyGuard {
     }
 
     //Pancake has to add hidden dummy pools inorder to alter the emission, here we make it simple and transparent to all.
-    function updateEmissionRate(uint256 _XbasePerBlock) external onlyOwner {
-        require(_XbasePerBlock <= MAX_EMISSION_RATE, "Emission too high");
+    function updateEmissionRate(uint256 _XBNBPerBlock) external onlyOwner {
+        require(_XBNBPerBlock <= MAX_EMISSION_RATE, "Emission too high");
         massUpdatePools();
-        XbasePerBlock = _XbasePerBlock;
-        emit UpdateEmissionRate(msg.sender, _XbasePerBlock);
+        XBNBPerBlock = _XBNBPerBlock;
+        emit UpdateEmissionRate(msg.sender, _XBNBPerBlock);
     }
 
     // Only update before start of farm

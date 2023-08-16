@@ -4,7 +4,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Xbase is ERC20("xbase Token", "XBASE"), Ownable {
+contract XBNB is ERC20("XBNB Token", "XBNB"), Ownable {
     using SafeMath for uint;
 
     uint256 public constant MAX_SUPPLY = 10_000_000 ether;

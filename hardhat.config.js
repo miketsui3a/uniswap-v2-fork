@@ -20,25 +20,24 @@ task("accounts", "Prints the list of accounts", async () => {
  */
 module.exports = {
   solidity: {
-    compilers: [
-      {
-        version: "0.5.16",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
+    compilers: [{
+      version: "0.5.16",
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 1000,
         },
       },
-      {
-        version: "0.6.7",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
+    },
+    {
+      version: "0.6.7",
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 1000,
         },
       },
+    },
     ],
     overrides: {
       "contracts/UniswapV2Router02.sol": {
@@ -167,7 +166,7 @@ module.exports = {
           },
         },
       },
-      "contracts/Xbase.sol": {
+      "contracts/XBNB.sol": {
         version: "0.8.0",
         settings: {
           optimizer: {
@@ -189,6 +188,11 @@ module.exports = {
       chainId: 97,
       accounts: [process.env.PRIVATE_KEY],
     },
+    opBNB: {
+      url: `https://opbnb.rpc.thirdweb.com/`,
+      chainId: 5611,
+      accounts: [process.env.PRIVATE_KEY],
+    }
   },
   namedAccounts: {
     deployer: 0,
